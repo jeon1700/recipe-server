@@ -3,7 +3,8 @@
 from flask import Flask
 from flask_restful import Api
 
-from resources.recipe import RecipeListResource, RecipeResource
+from resources.recipe import RecipeListResource, RecipePublishResource, RecipeResource
+from resources.user import UserRegisterResource
 
 app = Flask(__name__)
 
@@ -15,7 +16,9 @@ api = Api(app)
 # 경로(Path)와 리소스(API코드)를 연결한다.
 api.add_resource( RecipeListResource , '/recipes' )
 api.add_resource( RecipeResource , '/recipes/<int:recipe_id>')
- # 레시피테이블 숫자가 자동으로 바꾸는 방법 <int:recipe_id>
+ # 레시피 테이블 숫자가 자동으로 바꾸는 방법 <int:recipe_id>
+api.add_resource( RecipePublishResource , '/recipes/<int:recipe_id>/publish')
+api.add_resource( UserRegisterResource , '/user/register')
 
 
 if __name__ == '__main__':

@@ -220,7 +220,7 @@ class RecipeResource(Resource) :
         return{"result" : "success"}, 200 
 
 
-    # 면접에서 하지말아야 할 말 !!
+    ### 주의!
     ### restful API에서 
     ### GET, DELETE 메소드는, BODY 에 데이터를 전달하지 않습니다.(BODY에 JSON으로 전달하지마라, 호스트 사용)
         
@@ -257,6 +257,66 @@ class RecipeResource(Resource) :
         return {'result' : 'success'} , 200
 
 
+class RecipePublishResource(Resource) : 
+
+    def put(self, recipe_id) :
+
+        try :
+            
+            connection = get_connection()
+
+            query = '''update recipe
+                        set is_publish = 1 
+                        where id = %s;'''
+            
+            record = (recipe_id , )
+
+            cursor = connection.cursor()
+            cursor.execute(query, record)
+
+            connection.commit()
+            cursor.close()
+            connection.close()
+
+        except Error as e:
+            print(e)
+            cursor.close()
+            connection.close()
+            return {'result':'fail',
+                    'error': str(e)} , 500 
+        
+
+        return {'result' : 'success'} , 200
+
+    
+    def delete(self, recipe_id) :
+
+        try :
+            
+            connection = get_connection()
+
+            query = '''update recipe
+                        set is_publish = 0
+                        where id = %s;'''
+            
+            record = (recipe_id , )
+
+            cursor = connection.cursor()
+            cursor.execute(query, record)
+
+            connection.commit()
+            cursor.close()
+            connection.close()
+
+        except Error as e:
+            print(e)
+            cursor.close()
+            connection.close()
+            return {'result':'fail',
+                    'error': str(e)} , 500 
+        
+
+        return {'result' : 'success'} , 200
 
 
 
