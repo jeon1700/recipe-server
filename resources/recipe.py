@@ -135,22 +135,22 @@ class RecipeResource(Resource) :
     # Path (경로)에 숫자나 문자가 바뀌면서 처리되는 경우에는
     # 해당 변수를, 파라미터에 꼭 써줘야 한다.
     # 이 변수는, app.py 파일의 addResource 함수에서 사용한 변수!!
+    
+    @jwt_required()
     def get(self, recipe_id) :
-
-        print(recipe_id)
 
         # 1. 클라이언트로부터 데이터를 받아온다.
         #    이미 경로에 들어있는, 레시피 아이디를 받아왔다.
         #    위의 recipe_id 라는 변수에 이미 있다.
-
+        user_id = get_jwt_identity()
         # 2. DB에서 레시피 아이디에 해당하는 레시피 1개를 받아온다.
         try :
             connetion = get_connection()
 
             query = '''select * 
                         from recipe
-                        where id = %s;'''
-            record = (recipe_id , )    
+                        where id = %s aud user_id = %s;'''
+            record = (recipe_id , user_id )    
 
             cursor = connetion.cursor(dictionary = True)
 
